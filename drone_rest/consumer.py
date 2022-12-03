@@ -29,7 +29,7 @@ def consumer_job(args, config):
             manager_consumer.assign(partitions)
 
     # Subscribe to topic
-    topic = "manager"
+    topic = "drone_rest"
     manager_consumer.subscribe([topic], on_assign=reset_offset)
 
     # Poll for new messages from Kafka and print them.

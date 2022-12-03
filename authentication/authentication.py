@@ -50,10 +50,10 @@ def pin_login(login: PinLogin):
         raise HTTPException(status_code=403, detail="Bad pin")
 
 
-@app.get("/service")
-def verify(jwtToken: JwtToken):
+@app.get("/service/{token}")
+def verify(token: str):
     try:
-        response = jwt.decode(jwtToken.token, secret, algorithms=["HS256"])
+        response = jwt.decode(token, secret, algorithms=["HS256"])
     except:
         response = None
     return response

@@ -4,7 +4,7 @@ import json
 
 
 pin_auth_url = "http://localhost:8003/pin-login"
-drone_url = "http://localhost:8002"
+drone_url = "http://localhost:8002/command"
 max_attempts = 3
 
 

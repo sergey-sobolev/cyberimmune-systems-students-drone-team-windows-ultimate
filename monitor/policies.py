@@ -1,16 +1,13 @@
 import httpx
 
-auth_url = "http://localhost:8003/service"
-
 
 def check_operation(id, details):
-    # print(f"[debug] checking policies for event {id}, details: {details}")
-    print(f"[info] checking policies for event {id},"
-          f" {details['source']}->{details['deliver_to']}: {details['operation']}")
-    details['source'] = get_source(details['source'])
     src = details['source']
     dst = details['deliver_to']
     command = details['command']
+
+    print(f"[info] checking policies for event {id},"
+          f" {details['source']}->{details['deliver_to']}: {details['operation']}")
 
     if src == 'mobile_app' and dst == 'fly_control' and command == 'start':
         return True
@@ -64,19 +61,11 @@ def check_operation(id, details):
         return True
     if src == 'fly_control' and dst == 'control_center' and command == 'report':
         return True
-    # kea - Kafka events analyzer - an extra service for internal monitoring,
-    # can only communicate with itself
+
     if src == 'kea' and dst == 'kea' \
             and (command == 'self_test' or command == 'test_param'):
         return True
 
+    print(f"[error] event {id} was denied due to policies")
+
     return False
-
-
-def get_source(jwt: str):
-    response = httpx.get(auth_url, {"token": jwt})
-    if (response is None):
-        print("---------------------")
-        print("authentication failed")
-        print("---------------------")
-    return response.text
